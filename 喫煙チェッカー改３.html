@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>喫煙チェッカー改3</title>
+  <style>
+
+  </style>
+</head>
+
+<body>
+  <ul id="list">
+    <li id="heavy">ヘビースモーカー</li>
+    <p id="heavyP"></p>
+    <li id="normal">ほどほど喫煙者</li>
+    <p id="normalP"></p>
+    <li id="light">ちまちま喫煙者</li>
+    <p id="lightP"></p>
+    <li id="no-smoking">非喫煙者</li>
+    <p id="no-smokingP"></p>
+
+
+    <label><input type="radio" name="smoke" value="heavy">ヘビースモーカー</label>
+    <label><input type="radio" name="smoke" value="normal">ほどほど喫煙者</label>
+    <label><input type="radio" name="smoke" value="light">ちまちま喫煙者</label>
+    <label><input type="radio" name="smoke" value="no-smoking">非喫煙者</label>
+    <p id="result"></p>
+    <button id="decide">決定</button>
+
+
+    <script>
+
+      const punish = () => {
+        const rie = confirm("このまま嘘をつき通すと罰があります。心の準備はいいですか？")
+        if (rie === false) {
+          alert("正直に答えましょう^^");
+        } else {
+          window.location.href = "罰.html";
+        }
+      };
+
+
+      document.querySelector('#decide').addEventListener("click", () => {
+        document.querySelector('#heavyP').innerText = "";
+        document.querySelector('#normalP').innerText = "";
+        document.querySelector('#lightP').innerText = "";
+        document.querySelector('#no-smokingP').innerText = "";
+        document.querySelector('#result').innerText = "";
+        const selected = document.querySelector('input:checked');
+        let smokeLV = "";
+        if(!selected){
+          alert('選んでから押しましょう');
+        };
+
+          smokeLV = selected.parentNode.textContent;
+          const s = prompt(`${smokeLV}なんですねー。それはそうと一日何本吸われますか？？`)
+        if(s===null){
+          alert('やりなおし')
+          return;
+        };
+        
+        
+
+        console.log(smokeLV);
+        if (selected) {
+          if (selected.value === 'heavy') {
+            console.log("heavyが出ています");
+            if (s > 20) {
+              document.querySelector('#heavyP').innerText = "↑正直でえらい^^";
+            } else if (s <= 20 && s > 15) {
+              document.querySelector('#heavyP').innerText = "↑確かにここかもしれませんねえ";
+            } else if (s <= 15 && s > 8) {
+              document.querySelector('#normalP').innerText = "↑案外ここかもしれませんよ";
+            } else if (s <= 8 && s >= 1) {
+              document.querySelector('#lightP').innerText = "↑実はここかもしれませんよ";
+            } else {
+              punish();
+
+            };
+          } else if (selected.value === 'normal') {
+            console.log("normalが出ています");
+            if (s > 20) {
+              document.querySelector('#heavyP').innerText = "↑明らかにここでしょうに嘘はいけませんねえ";
+            } else if (s <= 20 && s > 15) {
+              document.querySelector('#heavyP').innerText = "↑ひょっとしたらここかもしれませんよ";
+            } else if (s <= 15 && s > 8) {
+              document.querySelector('#normalP').innerText = "↑確かにここかもしれませんねえ";
+            } else if (s <= 8 && s >= 1) {
+              document.querySelector('#lightP').innerText = "↑もっと吸っても大丈夫かもですよ";
+            } else {
+              punish();
+            };
+          } else if (selected.value === 'light') {
+            console.log("lightが出ています");
+            if (s > 20) {
+              document.querySelector('#heavyP').innerText = "↑おやおや嘘はいけませんよ";
+            } else if (s <= 20 && s > 15) {
+              document.querySelector('#heavyP').innerText = "↑実はここかもしれませんねえ";
+            } else if (s <= 15 && s > 8) {
+              document.querySelector('#normalP').innerText = "↑もしかしたらここかもしれませんよ";
+            } else if (s <= 8 && s >= 1) {
+              document.querySelector('#lightP').innerText = "↑ここっぽい！";
+            } else {
+              punish();
+            };
+          } else {
+            console.log("no-smokingが出ています")
+            if (s == 0) {
+              document.querySelector('#no-smokingP').innerText = "↑正直で素晴らしいです^^";
+            } else {
+              punish();
+            };
+          };
+
+
+        } ;
+      });
+      
+
+      //条件分岐の途中でifから始めてしまったので読み取らずnormalから先がareltになった→こまめにテストしながら作った方がいい
+      //HTMLの方のvalueが正しくなく、読み取らなかった→自分で書いたコードをコピペするときもちゃんと読みながらした方がいいと思った
+      //最初はconstで罰をまとめた気になったがconst=sの下に書き込んだ結果promptを入力した瞬間罰が発動した
+      //クリックイベントの頭に書いたがクリックしたら発動した
+      //スクリプトの頭に書いたら開いた瞬間罰が発動した
+      //チャットに聞いたら関数でまとめ呼び出す手法を思い出した
+      //式を丸ごとまとめて自由に使いたい時こそ関数の出番であることが分かった
+      //キャンセルしたら罰が発動し、Nunberは空文字も0として読むことが分かった
+      //デバックも楽するための苦労と知った
+      //問題点:選んでから押しましょうが出ない→const=sが条件分岐の頭で設定されているので未選択でもｓが先に出る
+      //上流の処理は先に書いてしまう方が分かりやすいと知った
+    </script>
